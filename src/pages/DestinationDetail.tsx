@@ -21,18 +21,21 @@ type DestinationInfo = {
 const API_BASE_URL = 'http://localhost:5000/api';
 
 export function DestinationDetail() {
-  const { id } = useParams();
+  // Change the parameter name to reflect that we're using a slug instead of id
+  const { slug } = useParams<{ slug: string }>();
+  
   const [destinationInfo, setDestinationInfo] = useState<DestinationInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchDestinationInfo = async () => {
-      if (!id) return;
+      if (!slug) return;
       
       try {
         setLoading(true);
-        const response = await fetch(`${API_BASE_URL}/destinations/${id}`);
+        // Use the slug directly as the destination identifier
+        const response = await fetch(`${API_BASE_URL}/destinations/${slug}`);
         
         if (!response.ok) {
           throw new Error('Failed to fetch destination information');
@@ -50,7 +53,7 @@ export function DestinationDetail() {
     };
 
     fetchDestinationInfo();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (

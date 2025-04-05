@@ -22,7 +22,8 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/destinations" element={<Destinations />} />
             <Route path="/compare" element={<Compare />} />
-            <Route path="/destination/:id" element={<DestinationDetail />} />
+            {/* Changed from /destination/:id to /destination/:slug */}
+            <Route path="/destination/:slug" element={<DestinationDetail />} />
             <Route path="/subscription" element={<Subscription />} />
             <Route
               path="/create"
