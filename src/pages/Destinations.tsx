@@ -1,9 +1,28 @@
 import { useState } from 'react';
-import { Filter, MapPin } from 'lucide-react';
+import { Filter } from 'lucide-react';
+import { DestinationCard } from './DestinationCard';
 
-const destinations = [
+type Destination = {
+  id: number | string;
+  name: string;
+  country: string;
+  price: string;
+  region: string;
+  season: string;
+  activities: string[];
+  image: string;
+};
+
+type FilterType = {
+  price: string[];
+  region: string[];
+  season: string[];
+  activities: string[];
+};
+
+const destinations: Destination[] = [
   {
-    id: 1,
+    id: 'paris',
     name: 'Paris',
     country: 'France',
     price: 'High',
@@ -12,15 +31,38 @@ const destinations = [
     activities: ['Culture', 'Food', 'Art'],
     image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34'
   },
-  // Add more destinations...
+  {
+    id: 'tokyo',
+    name: 'Tokyo',
+    country: 'Japan',
+    price: 'High',
+    region: 'Asia',
+    season: 'Spring',
+    activities: ['Culture', 'Food', 'Shopping'],
+    image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf'
+  },
+  {
+    id: 'new-york',
+    name: 'New York',
+    country: 'United States',
+    price: 'High',
+    region: 'Americas',
+    season: 'Fall',
+    activities: ['Culture', 'Food', 'Shopping'],
+    image: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9'
+  },
+  {
+    id: 'bali',
+    name: 'Bali',
+    country: 'Indonesia',
+    price: 'Moderate',
+    region: 'Asia',
+    season: 'Summer',
+    activities: ['Beach', 'Nature', 'Culture'],
+    image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4'
+  },
+  // Add more destinations as needed
 ];
-
-type FilterType = {
-  price: string[];
-  region: string[];
-  season: string[];
-  activities: string[];
-};
 
 export function Destinations() {
   const [activeFilters, setActiveFilters] = useState<FilterType>({
@@ -39,6 +81,18 @@ export function Destinations() {
         : [...prev[type], value]
     }));
   };
+
+  // Filter destinations based on active filters
+  const filteredDestinations = destinations.filter(destination => {
+    // If no filters are active for a category, include all destinations
+    const priceMatch = activeFilters.price.length === 0 || activeFilters.price.includes(destination.price);
+    const regionMatch = activeFilters.region.length === 0 || activeFilters.region.includes(destination.region);
+    const seasonMatch = activeFilters.season.length === 0 || activeFilters.season.includes(destination.season);
+    const activitiesMatch = activeFilters.activities.length === 0 || 
+      destination.activities.some(activity => activeFilters.activities.includes(activity));
+    
+    return priceMatch && regionMatch && seasonMatch && activitiesMatch;
+  });
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -106,7 +160,7 @@ export function Destinations() {
           {/* Activities Filter */}
           <div>
             <h3 className="font-semibold mb-2">Activities</h3>
-            {['Culture', 'Nature', 'Adventure', 'Food', 'Beach'].map(activity => (
+            {['Culture', 'Nature', 'Adventure', 'Food', 'Beach', 'Art', 'Shopping'].map(activity => (
               <label key={activity} className="flex items-center gap-2 mb-2">
                 <input
                   type="checkbox"
@@ -122,33 +176,29 @@ export function Destinations() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {destinations.map(destination => (
-          <div key={destination.id} className="bg-white rounded-lg overflow-hidden shadow-lg">
-            <img
-              src={destination.image}
-              alt={destination.name}
-              className="w-full h-48 object-cover"
-            />
-            <div className="p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <MapPin className="h-5 w-5 text-blue-800" />
-                <h3 className="text-xl font-semibold">{destination.name}</h3>
-              </div>
-              <p className="text-gray-600 mb-2">{destination.country}</p>
-              <div className="flex flex-wrap gap-2">
-                {destination.activities.map(activity => (
-                  <span
-                    key={activity}
-                    className="px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
-                  >
-                    {activity}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
+        {filteredDestinations.map(destination => (
+          <DestinationCard
+            key={destination.id}
+            id={destination.id}
+            name={destination.name}
+            country={destination.country}
+            image={destination.image}
+            activities={destination.activities}
+          />
         ))}
       </div>
+      
+      {filteredDestinations.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-xl text-gray-600">No destinations match your selected filters.</p>
+          <button 
+            onClick={() => setActiveFilters({price: [], region: [], season: [], activities: []})}
+            className="mt-4 px-4 py-2 bg-blue-800 text-white rounded-md"
+          >
+            Clear all filters
+          </button>
+        </div>
+      )}
     </div>
   );
 }
