@@ -25,7 +25,7 @@ function App() {
             <Route path="/destination/:id" element={<DestinationDetail />} />
             <Route path="/subscription" element={<Subscription />} />
             <Route
-              path="/creator-dashboard"
+              path="/create"
               element={
                 <ProtectedRoute>
                   <CreatorDashboard />
