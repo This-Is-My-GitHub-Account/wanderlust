@@ -6,7 +6,7 @@ import { Signup } from './pages/Signup';
 import { Destinations } from './pages/Destinations';
 import { Compare } from './pages/Compare';
 import { DestinationDetail } from './pages/DestinationDetail';
-import { Subscription } from './pages/Subscription';
+ import Subscription from './pages/Subscription';
 import { CreatorDashboard } from './pages/CreatorDashboard';
 import { ProtectedRoute } from './components/ProtectedRoute';
 

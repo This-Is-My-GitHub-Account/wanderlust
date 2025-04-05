@@ -1,164 +1,161 @@
-import { useState } from 'react';
-import { Check } from 'lucide-react';
+import { Check } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
-const plans = [
-  {
-    name: 'Basic',
-    price: '$9.99',
-    features: [
-      'Access to basic destination guides',
-      'Limited search functionality',
-      'Basic trip planning tools',
-      'Community forum access'
-    ]
-  },
-  {
-    name: 'Premium',
-    price: '$19.99',
-    features: [
-      'All Basic features',
-      'Unlimited destination guides',
-      'Advanced search filters',
-      'AI-powered trip recommendations',
-      'Priority customer support'
-    ]
-  },
-  {
-    name: 'Professional',
-    price: '$29.99',
-    features: [
-      'All Premium features',
-      'Creator account access',
-      'Custom trip planning',
-      'Exclusive content access',
-      'Direct support line',
-      'Early access to new features'
-    ]
-  }
-];
-
-export function Subscription() {
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-  const [showModal, setShowModal] = useState(false);
-
-  const handleSubscribe = (planName: string) => {
-    setSelectedPlan(planName);
-    setShowModal(true);
-  };
-
+export default function Subscription() {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto py-12 px-4">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4">Choose Your Travel Journey</h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          Select the perfect plan to enhance your travel experience with WanderLust Canvas
+        <h2 className="text-3xl font-bold tracking-tight mb-2">Choose Your Travel Plan</h2>
+        <p className="text-muted-foreground max-w-2xl mx-auto">
+          Select the perfect travel package that suits your needs and budget. Explore the world your way.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-        {plans.map((plan) => (
-          <div
-            key={plan.name}
-            className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300"
-          >
-            <div className="p-6 bg-blue-800 text-white text-center">
-              <h2 className="text-2xl font-bold mb-2">{plan.name}</h2>
-              <p className="text-4xl font-bold">{plan.price}</p>
-              <p className="text-sm opacity-80">per month</p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Basic Plan */}
+        <Card className="flex flex-col border-border">
+          <CardHeader>
+            <CardTitle className="text-2xl">Basic</CardTitle>
+            <CardDescription>Perfect for solo travelers</CardDescription>
+            <div className="mt-4">
+              <span className="text-4xl font-bold">$299</span>
+              <span className="text-muted-foreground ml-2">/ person</span>
             </div>
-            <div className="p-6">
-              <ul className="space-y-4 mb-8">
-                {plan.features.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-blue-800 mt-1" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <button
-                onClick={() => handleSubscribe(plan.name)}
-                className="w-full py-3 px-4 bg-blue-800 text-white rounded-md hover:bg-blue-900 transition-colors"
-              >
-                Subscribe Now
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+          </CardHeader>
+          <CardContent className="flex-grow">
+            <ul className="space-y-3">
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>3-day guided tours</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>Standard accommodation</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>Airport transfers</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>Breakfast included</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>24/7 customer support</span>
+              </li>
+            </ul>
+          </CardContent>
+          <CardFooter>
+            <Button className="w-full">Book Now</Button>
+          </CardFooter>
+        </Card>
 
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full">
-            <h2 className="text-2xl font-bold mb-4">Subscribe to {selectedPlan}</h2>
-            <form className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  className="w-full px-3 py-2 border rounded-md"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Card Number
-                </label>
-                <input
-                  type="text"
-                  className="w-full px-3 py-2 border rounded-md"
-                  required
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Expiry Date
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="MM/YY"
-                    className="w-full px-3 py-2 border rounded-md"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    CVC
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2 border rounded-md"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <input type="checkbox" className="mt-1" required />
-                <label className="text-sm text-gray-600">
-                  I agree to the terms and conditions and authorize recurring monthly charges
-                </label>
-              </div>
-              <div className="flex gap-4">
-                <button
-                  type="submit"
-                  className="flex-1 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900"
-                >
-                  Confirm Subscription
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="flex-1 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+        {/* Most Popular Plan */}
+        <Card className="flex flex-col border-2 border-primary relative transform md:scale-105 shadow-lg">
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-medium">
+            Most Popular
           </div>
-        </div>
-      )}
+          <CardHeader>
+            <CardTitle className="text-2xl">Premium</CardTitle>
+            <CardDescription>Ideal for couples and families</CardDescription>
+            <div className="mt-4">
+              <span className="text-4xl font-bold">$599</span>
+              <span className="text-muted-foreground ml-2">/ person</span>
+            </div>
+          </CardHeader>
+          <CardContent className="flex-grow">
+            <ul className="space-y-3">
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>7-day comprehensive tour package</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>4-star hotel accommodations</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>All meals included (breakfast, lunch, dinner)</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>Private transportation</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>Skip-the-line attraction tickets</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>Guided excursions to hidden gems</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>24/7 concierge service</span>
+              </li>
+            </ul>
+          </CardContent>
+          <CardFooter>
+            <Button className="w-full" variant="default">
+              Book Now
+            </Button>
+          </CardFooter>
+        </Card>
+
+        {/* Pro Plan */}
+        <Card className="flex flex-col border-border">
+          <CardHeader>
+            <CardTitle className="text-2xl">Pro</CardTitle>
+            <CardDescription>Luxury travel experience</CardDescription>
+            <div className="mt-4">
+              <span className="text-4xl font-bold">$999</span>
+              <span className="text-muted-foreground ml-2">/ person</span>
+            </div>
+          </CardHeader>
+          <CardContent className="flex-grow">
+            <ul className="space-y-3">
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>10-day luxury travel experience</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>5-star luxury accommodations</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>Gourmet dining experiences</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>Private chauffeur and luxury transportation</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>VIP access to exclusive attractions</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>Personalized itinerary planning</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>Spa treatment package included</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="h-5 w-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span>24/7 personal concierge</span>
+              </li>
+            </ul>
+          </CardContent>
+          <CardFooter>
+            <Button className="w-full">Book Now</Button>
+          </CardFooter>
+        </Card>
+      </div>
     </div>
-  );
+  )
 }
+
