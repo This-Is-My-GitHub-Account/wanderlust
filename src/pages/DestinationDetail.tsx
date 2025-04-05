@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { MapPin, Calendar, DollarSign, Globe, Lightbulb } from 'lucide-react';
 
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
-
 type DestinationInfo = {
+  id: string;
+  name: string;
   overview: string;
   thingsToDo: string[];
   bestTimeToVisit: string;
@@ -18,44 +17,34 @@ type DestinationInfo = {
   travelTips: string[];
 };
 
+// Set your backend URL
+const API_BASE_URL = 'http://localhost:5000/api';
+
 export function DestinationDetail() {
   const { id } = useParams();
   const [destinationInfo, setDestinationInfo] = useState<DestinationInfo | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchDestinationInfo = async () => {
+      if (!id) return;
+      
       try {
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-        const prompt = `Generate comprehensive travel information about [Destination Name] including:
-          1. Brief overview
-          2. Top things to do
-          3. Best time to visit
-          4. Cost analysis for different budgets
-          5. Local culture insights
-          6. Essential travel tips
-          Format the response in a structured way.`;
-
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
+        setLoading(true);
+        const response = await fetch(`${API_BASE_URL}/destinations/${id}`);
         
-        // Parse the AI response and structure it (simplified for example)
-        setDestinationInfo({
-          overview: "Sample overview text",
-          thingsToDo: ["Activity 1", "Activity 2", "Activity 3"],
-          bestTimeToVisit: "Spring and Fall are ideal",
-          costAnalysis: {
-            budget: "$50-100/day",
-            moderate: "$100-200/day",
-            luxury: "$200+/day"
-          },
-          localCulture: "Rich cultural heritage...",
-          travelTips: ["Tip 1", "Tip 2", "Tip 3"]
-        });
-        setLoading(false);
+        if (!response.ok) {
+          throw new Error('Failed to fetch destination information');
+        }
+        
+        const data = await response.json();
+        setDestinationInfo(data);
+        setError(null);
       } catch (error) {
         console.error('Error fetching destination info:', error);
+        setError('Failed to load destination information');
+      } finally {
         setLoading(false);
       }
     };
@@ -71,10 +60,10 @@ export function DestinationDetail() {
     );
   }
 
-  if (!destinationInfo) {
+  if (error || !destinationInfo) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Failed to load destination information.</p>
+        <p>{error || 'Failed to load destination information.'}</p>
       </div>
     );
   }
@@ -82,11 +71,14 @@ export function DestinationDetail() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
+        {/* Title */}
+        <h1 className="text-4xl font-bold mb-6 text-center">{destinationInfo.name}</h1>
+        
         {/* Overview Section */}
         <section className="mb-12">
           <div className="flex items-center gap-2 mb-4">
             <MapPin className="h-6 w-6 text-blue-800" />
-            <h1 className="text-3xl font-bold">Destination Overview</h1>
+            <h2 className="text-3xl font-bold">Destination Overview</h2>
           </div>
           <p className="text-gray-700 leading-relaxed">{destinationInfo.overview}</p>
         </section>
